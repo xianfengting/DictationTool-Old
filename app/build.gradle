@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def keyPropertiesFile = rootProject.file("keystore.properties")
+def keyProperties = new Properties()
+if (keyPropertiesFile.exists()) {
+    keyProperties.load(new FileInputStream(keyPropertiesFile))
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -23,6 +29,17 @@ android {
     }
     lintOptions {
         disable 'GoogleAppIndexingWarning'
+    }
+    signingConfigs {
+        release {
+            storeFile file("../keystore.jks")
+            storePassword keyProperties.containsKey("KEYSTORE_PASSWORD") ?
+                    keyProperties['KEYSTORE_PASSWORD'] : System.getenv("KEYSTORE_PASSWORD")
+            keyAlias keyProperties.containsKey("ALIAS_NAME") ?
+                    keyProperties['ALIAS_NAME'] : System.getenv("ALIAS_NAME")
+            keyPassword keyProperties.containsKey("ALIAS_PASSWORD") ?
+                    keyProperties['ALIAS_PASSWORD'] : System.getenv("ALIAS_PASSWORD")
+        }
     }
 }
 
