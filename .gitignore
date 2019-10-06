@@ -84,3 +84,6 @@ fastlane/readme.md
 
 # Keystore file
 /keystore.jks
+
+# Travis secret file
+/.travis.zip
