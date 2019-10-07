@@ -21,7 +21,7 @@ script:
 addons:
   ssh_known_hosts:
   - github.com
-before_deploy:
+after_script:
 - git config user.name "xianfengting"
 - git config user.email "xianfengting221@163.com"
 - main_version_content=$(cat main-version)
