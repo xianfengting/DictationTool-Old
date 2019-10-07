@@ -28,6 +28,7 @@ after_script:
 - ./gradlew updateSnapshotVersion
 - ./gradlew generateProjectVersionFile
 - project_version=$(cat project-version)
+- git diff
 - git add project.properties
 - git commit -s -m "Auto-update snapshot version"
 - git tag -a $project_version -m "Auto-deployed project version ${project_version}"
