@@ -14,6 +14,7 @@ before_install:
 - eval "$(ssh-agent -s)"
 - chmod 600 .ssh/id_rsa
 - ssh-add .ssh/id_rsa
+- ssh -T git@github.com
 before_script:
 - chmod +x gradlew
 script:
