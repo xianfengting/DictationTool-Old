@@ -25,10 +25,10 @@ after_script:
 - do_deploy_content=$(cat .do-deploy)
 - do_deploy=$((10#${do_deploy_content}))
 - if [ $do_depoly -ne 0 ]; then
-- git config user.name "xianfengting"
-- git config user.email "xianfengting221@163.com"
-- git checkout master
-- ./gradlew generateProjectVersionFile
-- project_version=$(cat project-version)
-- git tag -a $project_version -m "Auto-deployed project version ${project_version}"
-- fi
+  git config user.name "xianfengting"
+  git config user.email "xianfengting221@163.com"
+  git checkout master
+  ./gradlew generateProjectVersionFile
+  project_version=$(cat project-version)
+  git tag -a $project_version -m "Auto-deployed project version ${project_version}"
+  fi
