@@ -26,3 +26,20 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task generateProjectVersionFile {
+    doLast {
+        def prop = new Properties()
+        prop.load(new FileInputStream(new File(rootProject.rootDir, "project.properties")))
+        def majorVer = Integer.parseInt(prop.getProperty("version.major"))
+        def minorVer = Integer.parseInt(prop.getProperty("version.minor"))
+        def patchVer = Integer.parseInt(prop.getProperty("version.patch"))
+        def rcVer = Integer.parseInt(prop.getProperty("version.rc"))
+        def snapshotVer = Integer.parseInt(prop.getProperty("version.snapshot"))
+        def verStr = "v${majorVer}.${minorVer}${patchVer > 0 ? ".$patchVer" : ""}" +
+                "${rcVer > 0 ? "-rc$rcVer" : ""}${snapshotVer > 0 ? "-sn$snapshotVer" : ""}"
+        def fw = new FileWriter("project-version")
+        fw.write(verStr)
+        fw.close()
+    }
+}

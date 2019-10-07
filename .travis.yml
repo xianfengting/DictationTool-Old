@@ -22,13 +22,13 @@ addons:
   ssh_known_hosts:
   - github.com
 after_script:
+- do_deploy_content=$(cat .do-deploy)
+- do_deploy=$((10#${do_deploy_content}))
+- if [ $do_depoly -ne 0 ]; then
 - git config user.name "xianfengting"
 - git config user.email "xianfengting221@163.com"
-- main_version_content=$(cat main-version)
-- snapshot_version_content=$(cat snapshot-version)
-- snapshot_version=$((10#${snapshot_version_content}))
-- snapshot_version=`expr $snapshot_version + 1`
-- echo -n $snapshot_version > snapshot-version
-- git add snapshot-version
-- git commit -s -m "Auto-update snapshot version"
-- git tag -a "v${main_version_content}-sn$snapshot_version" -m "Version ${main_version_content} Snapshot $snapshot_version"
+- git checkout master
+- ./gradlew generateProjectVersionFile
+- project_version=$(cat project-version)
+- git tag -a $project_version -m "Auto-deployed project version ${project_version}"
+- fi
