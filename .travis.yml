@@ -15,20 +15,30 @@ before_install:
 - chmod 600 .ssh/id_rsa
 - ssh-add .ssh/id_rsa
 before_script:
-  - chmod +x gradlew
+- chmod +x gradlew
 script:
 - "./gradlew assembleRelease"
 addons:
   ssh_known_hosts:
   - github.com
-after_script:
+before_deploy:
 - git config user.name "xianfengting"
 - git config user.email "xianfengting221@163.com"
 - git checkout master
-- ./gradlew updateSnapshotVersion
-- ./gradlew generateProjectVersionFile
+- "./gradlew updateSnapshotVersion"
+- "./gradlew generateProjectVersionFile"
 - project_version=$(cat project-version)
 - git diff
 - git add project.properties
 - git commit -s -m "Auto-update snapshot version"
 - git tag -a $project_version -m "Auto-deployed project version ${project_version}"
+deploy:
+  provider: releases
+  api_key:
+    secure: ITgol/oFMcAud+53vX/6rhsDJBF3OJlkBiFN5Uf9ij/c9kPLm9Z0LHBI1aazyhsjl5kRX1xB8nQaYW9GnwQTfek6fiSPuOtwo8deZGJWWmOpknh85PMBrO/NshojgaYxouKYxE0MBs0IZqJoBraYe8dxUK9YT0UHwXj7ZmKQREerSJflVTnTF1z9uOSmFbWMqlfC67NYjnBf5OY9cGI04Qt0/qmOiyDr+XhSHyDpF8g5z6wDQEZM0egIN4WfYnSj/DXHH7B1iIUIpcPgy8oruBz7M67sjAEnS0Fx0BJs/UAcJCNFXA6ri0R6x4oahioHaD66Lh4Nido5wjna6MUeaSNTUWcnVWg3N0/C0uGzIGx2ZaDsdKk0AhvGDcroWMpGAmHXdHscFPx2wvogDyz5xOrkiNBfc+1SrMqEdLlqyfmaNFGdiw9t/K+SopjoHEulHsbsezHq29/BYsoUVxRrY3/tNV1KvA8G2AIVswGlWDENDeMHjaurcbyAB7+JyLXdc53O6ki3g0M+FwVzZx6LdE9eQn08RJce4PQZmmoEEkr0Fq7i4yDezE4B5if/0bQAPGjCoWKsWbgqmnXT56VQFi12RMcanES+EzYP7/8azupB1OWJrEpyqH9YSpTqa7wkYuLzDsM7TIbgoSL5GOD6GD5wT2ARyc76F3k/+ddVkDg=
+  file: app/build/outputs/apk/release/app-release-unsigned.apk
+  on:
+    repo: xianfengting/DictationTool
+    tags: true
+after_deploy:
+- git push origin master --tags
