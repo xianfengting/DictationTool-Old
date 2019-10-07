@@ -39,6 +39,6 @@ deploy:
   file: app/build/outputs/apk/release/app-release-unsigned.apk
   on:
     repo: xianfengting/DictationTool
-    tags: true
+    branch: master
 after_deploy:
 - git push origin master --tags
