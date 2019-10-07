@@ -27,6 +27,17 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+task updateSnapshotVersion {
+    doLast {
+        def prop = new Properties()
+        prop.load(new FileInputStream(new File(rootProject.rootDir, "project.properties")))
+        def snapshotVer = Integer.parseInt(prop.getProperty("version.snapshot"))
+        snapshotVer += 1
+        prop.setProperty("version.snapshot", "$snapshotVer")
+        prop.store(new FileWriter(new File(rootProject.rootDir, "project.properties")), "Auto-updated snapshot version")
+    }
+}
+
 task generateProjectVersionFile {
     doLast {
         def prop = new Properties()
